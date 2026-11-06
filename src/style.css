@@ -1,1 +1,63 @@
 @import "tailwindcss";
+
+/* dark: variant follows the toggle, not the OS */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --canvas: #f5f5f7;      /* page background */
+  --cell: #ffffff;        /* board tiles */
+  --tile: #ffffff;        /* score tiles */
+  --fill: #e8e8ed;        /* segmented controls, secondary buttons */
+  --raised: #ffffff;      /* selected segment */
+  --line: #e5e5ea;        /* hairline borders */
+  --hover: #fafafa;
+  --hover-line: #d1d1d6;
+  --ink: #1d1d1f;         /* main text, X mark, win line */
+  --ink-soft: #636366;    /* secondary text */
+  --mark-o: #8e8e93;      /* O mark */
+  --invert: #1d1d1f;      /* primary button, winner tile */
+  --on-invert: #ffffff;
+  --glow: rgba(0, 0, 0, 0.14);
+  --sheen: rgba(255, 255, 255, 0.9);
+  --ambient: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="dark"] {
+  --canvas: #000000;
+  --cell: #0f0f10;
+  --tile: #1c1c1e;
+  --fill: #1c1c1e;
+  --raised: #2c2c2e;
+  --line: #1f1f22;
+  --hover: #161618;
+  --hover-line: #2c2c2e;
+  --ink: #f5f5f7;
+  --ink-soft: #8e8e93;
+  --mark-o: #8e8e93;
+  --invert: #f5f5f7;
+  --on-invert: #000000;
+  --glow: rgba(255, 255, 255, 0.14);
+  --sheen: rgba(255, 255, 255, 0.06);
+  --ambient: rgba(255, 255, 255, 0.07);
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-cell: var(--cell);
+  --color-tile: var(--tile);
+  --color-fill: var(--fill);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-hover: var(--hover);
+  --color-hover-line: var(--hover-line);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-mark-o: var(--mark-o);
+  --color-invert: var(--invert);
+  --color-on-invert: var(--on-invert);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Helvetica Neue", Inter, sans-serif;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
