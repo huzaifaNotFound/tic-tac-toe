@@ -11,11 +11,11 @@
     />
     <title>Tic Tac Toe</title>
   </head>
-  <body class="bg-canvas h-dvh">
-    <div class="w-full h-full max-w-6xl mx-auto px-12 py-6">
+  <body class="bg-canvas h-svh">
+    <div class="w-full h-svh max-w-6xl mx-auto px-12 pt-6">
       <!-- Header -->
       <header class="w-full h-11 flex items-center justify-between">
-        <div class="text-base font-sans font-semibold">Tic Tac Toe</div>
+        <div class="text-base font-sans font-semibold text-ink">Tic Tac Toe</div>
         <div class="space-x-1">
           <button class="rounded-full p-2 bg-fill" aria-label="Sound" aria-pressed="true">
             <svg
@@ -51,49 +51,61 @@
         </div>
       </header>
 
-
       <!--main-->
-      <main class="w-full h-screen flex items-center justify-center space-x-24 pb-20">
-        <div
-          class="w-160 h-160 flex flex-col items-center justify-center "
-        >
-          <h1 class="font-sans font-bold text-[40px] text-center mb-6">Your Turn</h1>
+      <main class="w-full flex-1 flex items-center justify-center mt-42">
+        <div class="w-160 h-auto flex flex-col items-center justify-center">
+          <h1 class="font-sans font-bold text-[40px] text-center mb-6 text-ink">Your Turn</h1>
 
           <!-- tic tac toe grid -->
           <div class="grid grid-cols-3 gap-3">
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110 "
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
           </div>
         </div>
 
         <!-- info box-->
-        <div class="h-75 w-85 ">
-          
+        <div class="h-75 w-85 bg-amber-50">
+          <div class="w-full rounded-full bg-fill h-11 flex items-center justify-between p-[5px]">
+            <button class="h-full w-41 bg-tile rounded-full text-ink font-sans text-sm font-medium shadow-sm">vs Computer</button>
+            <button class="h-full w-41 rounded-full text-ink-soft  font-sans text-sm font-medium">Pass & Play</button>
+          </div>
+
+          <div class="w-full rounded-full bg-fill h-9 flex items-center justify-between p-[5px] mt-3">
+            <button class="h-full w-27 rounded-full text-ink-soft font-sans text-sm font-medium">Easy</button>
+            <button class="h-full w-27 bg-tile rounded-full text-ink font-sans text-sm font-medium shadow-sm">Medium</button>
+            <button class="h-full w-27 rounded-full text-ink-soft font-sans text-sm font-medium">Hard</button>
+          </div>
+          <div>
+            <div><span>0</span><span>You</span></div>
+            <div><span>0</span><span>Draws</span></div>
+            <div><span>0</span> <span>Computer</span></div>
+          </div>
+          <div><button>Reset Score</button> <button>New Game</button></div>
         </div>
       </main>
     </div>
