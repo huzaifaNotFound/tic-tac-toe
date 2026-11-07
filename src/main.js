@@ -37,7 +37,11 @@ const mark = (color, body, extra = "") =>
   `<svg class="mark ${color}" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" ${extra} aria-hidden="true">${body}</svg>`;
 
 const MARKS = {
-  X: mark("text-ink", '<path pathLength="1" d="M10 10L46 46"/><path pathLength="1" d="M46 10L10 46"/>', 'stroke-linecap="round"'),
+  X: mark(
+    "text-ink",
+    '<path pathLength="1" d="M10 10L46 46"/><path pathLength="1" d="M46 10L10 46"/>',
+    'stroke-linecap="round"',
+  ),
   O: mark("text-mark-o", '<circle pathLength="1" cx="28" cy="28" r="18" transform="rotate(-90 28 28)"/>'),
 };
 
@@ -51,12 +55,12 @@ const ANIMS = ["animate-rise", "animate-pop"];
 /* ---------- State ---------- */
 let state = Array(9).fill(null);
 let turn = "X";
-let starter = "X"; 
+let starter = "X";
 let over = false;
-let busy = false; 
+let busy = false;
 let refreshing = false;
-let pending = null; 
-let gid = 0; 
+let pending = null;
+let gid = 0;
 let currentMode = "cpu";
 let currentLevel = "medium";
 const score = { x: 0, d: 0, o: 0 };
@@ -66,7 +70,7 @@ const ms = (n) => (reduceMotion() ? 0 : n);
 
 function replay(el, cls) {
   el.classList.remove(...ANIMS);
-  void el.offsetWidth; 
+  void el.offsetWidth;
   el.classList.add(cls);
 }
 
@@ -76,8 +80,7 @@ function setTitle(text) {
   replay(title, "animate-rise");
 }
 
-const turnTitle = () =>
-  currentMode === "cpu" ? (turn === "X" ? "Your Turn" : "Thinking…") : `${turn}’s Turn`;
+const turnTitle = () => (currentMode === "cpu" ? (turn === "X" ? "Your Turn" : "Thinking…") : `${turn}’s Turn`);
 
 const syncLock = () => board.toggleAttribute("data-locked", over || busy || refreshing);
 
@@ -94,7 +97,7 @@ function applyTheme(t) {
 themeBtn.addEventListener("click", () => {
   const next = root.dataset.theme === "dark" ? "light" : "dark";
   try {
-    localStorage.setItem("theme", next); 
+    localStorage.setItem("theme", next);
   } catch {}
   const swap = () => applyTheme(next);
   if (document.startViewTransition && !reduceMotion()) document.startViewTransition(swap);
@@ -136,14 +139,14 @@ function drawWinLine(combo) {
   let [x1, y1] = center(first);
   let [x2, y2] = center(last);
   const len = Math.hypot(x2 - x1, y2 - y1);
-  const ext = first.width * 0.28; 
+  const ext = first.width * 0.28;
   const dx = ((x2 - x1) / len) * ext;
   const dy = ((y2 - y1) / len) * ext;
   x1 -= dx;
   y1 -= dy;
   x2 += dx;
   y2 += dy;
-  const L = Math.hypot(x2 - x1, y2 - y1)
+  const L = Math.hypot(x2 - x1, y2 - y1);
 
   winLine.setAttribute("viewBox", `0 0 ${br.width} ${br.height}`);
   winLine.style.opacity = "1";
@@ -158,7 +161,6 @@ function drawWinLine(combo) {
     });
   });
 
-  
   tiles.forEach((t, i) => {
     t.style.opacity = combo.includes(i) ? "" : "0.35";
   });
@@ -171,7 +173,7 @@ async function refreshBoard(reset) {
     return;
   }
   refreshing = true;
-  gid++; 
+  gid++;
   syncLock();
 
   try {
@@ -180,7 +182,6 @@ async function refreshBoard(reset) {
       return;
     }
 
-    
     const out = { duration: 220, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" };
     const leaving = tiles
       .map((t) => t.querySelector("svg"))
@@ -199,7 +200,6 @@ async function refreshBoard(reset) {
     }
     await Promise.all(leaving.map((a) => a.finished));
 
-    
     reset();
     leaving.forEach((a) => a.cancel());
 
@@ -259,7 +259,6 @@ const winnerOf = (s) => {
   return l && s[l[0]];
 };
 
-
 function immediateWin(player) {
   for (let i = 0; i < 9; i++) {
     if (state[i]) continue;
@@ -292,7 +291,7 @@ function pickMove() {
   if (currentLevel === "easy") return pick(free);
 
   if (currentLevel === "medium") {
-    if (Math.random() < 0.15) return pick(free); 
+    if (Math.random() < 0.15) return pick(free);
     const win = immediateWin("O");
     if (win >= 0) return win;
     const block = immediateWin("X");
@@ -301,7 +300,7 @@ function pickMove() {
   }
 
   // hard mode
-  if (free.length === 9) return pick([0, 2, 4, 6, 8]); 
+  if (free.length === 9) return pick([0, 2, 4, 6, 8]);
   let bestScore = -Infinity;
   let bestMoves = [];
   for (const i of free) {
@@ -322,14 +321,13 @@ function computerTurn(delay = 550) {
   syncLock();
   const g = gid;
   const go = () => {
-    if (g !== gid) return; 
-    if (refreshing) return setTimeout(go, 100); 
+    if (g !== gid) return;
+    if (refreshing) return setTimeout(go, 100);
     busy = false;
     place(pickMove());
   };
   setTimeout(go, delay);
 }
-
 
 function resetGame() {
   gid++;
@@ -348,16 +346,14 @@ function resetGame() {
   setTitle(turnTitle());
   renderScore();
   updateTurn();
-  computerTurn(1000); 
+  computerTurn(1000);
 }
-
 
 function newSession() {
   Object.assign(score, { x: 0, d: 0, o: 0 });
   starter = "X";
   resetGame();
 }
-
 
 function finish() {
   over = true;
@@ -371,9 +367,9 @@ function place(i) {
   tiles[i].disabled = true;
   labelTile(i);
 
-  const combo = winningLine(state)
+  const combo = winningLine(state);
   if (combo) {
-    finish()
+    finish();
     const key = turn.toLowerCase();
     score[key]++;
     setTitle(currentMode === "cpu" ? (turn === "X" ? "You Win" : "Computer Wins") : `${turn} Wins`);
@@ -382,15 +378,13 @@ function place(i) {
     const g = gid;
     const lineAt = ms(380);
     const doneAt = lineAt + ms(1000) + 120;
-    setTimeout(() => g === gid && drawWinLine(combo), lineAt)
+    setTimeout(() => g === gid && drawWinLine(combo), lineAt);
     setTimeout(() => g === gid && renderScore(key), doneAt);
     return;
   }
 
-
-
   if (state.every(Boolean)) {
-    finish()
+    finish();
     score.d++;
     setTitle("It’s a Draw");
     updateTurn();
@@ -401,7 +395,7 @@ function place(i) {
   turn = turn === "X" ? "O" : "X";
   setTitle(turnTitle());
   updateTurn();
-  computerTurn()
+  computerTurn();
 }
 
 board.addEventListener("click", (e) => {
@@ -411,28 +405,25 @@ board.addEventListener("click", (e) => {
   if (!state[i]) place(i);
 });
 
-newGameBtn.addEventListener("click",() =>refreshBoard(resetGame));
+newGameBtn.addEventListener("click", () => refreshBoard(resetGame));
 
-wire(mode,(v) =>{
-    currentMode = v
-    const cpu = v === "cpu";
-    level.toggleAttribute("data-off", !cpu)
-    level.inert =!cpu
-    refreshBoard(newSession)
-})
+wire(mode, (v) => {
+  currentMode = v;
+  const cpu = v === "cpu";
+  level.toggleAttribute("data-off", !cpu);
+  level.inert = !cpu;
+  refreshBoard(newSession);
+});
 
+wire(level, (v) => {
+  currentLevel = v;
+  refreshBoard(newSession);
+});
 
-
-wire(level,(v)=>{
-    currentLevel = v
-    refreshBoard(newSession)
-
-})
-
-resetScoreBtn.addEventListener("click", ()=>{
-    Object.assign(score, {x:0, d:0, o:0});
-    renderScore();
-})
+resetScoreBtn.addEventListener("click", () => {
+  Object.assign(score, { x: 0, d: 0, o: 0 });
+  renderScore();
+});
 
 const placeThumbs = () => [mode, level].forEach((s) => moveThumb(s, false));
 placeThumbs();
