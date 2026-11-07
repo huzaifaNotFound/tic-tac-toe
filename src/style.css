@@ -257,3 +257,32 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+.sound-stack {
+  display: grid;
+  place-items: center;
+}
+.sound-stack svg {
+  grid-area: 1 / 1; 
+  transition:
+    opacity 0.35s ease,
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sound-stack .vol-off {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+
+.sound-stack[aria-pressed="false"] .vol-on {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+.sound-stack[aria-pressed="false"] .vol-off {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sound-stack svg { transition-duration: 0.01ms; }
+}

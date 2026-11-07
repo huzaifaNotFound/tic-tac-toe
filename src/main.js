@@ -291,13 +291,21 @@ function pickMove() {
   if (currentLevel === "easy") return pick(free);
 
   if (currentLevel === "medium") {
-    if (Math.random() < 0.15) return pick(free);
-    const win = immediateWin("O");
-    if (win >= 0) return win;
-    const block = immediateWin("X");
-    if (block >= 0) return block;
-    return pick(free);
-  }
+  if (Math.random() < 0.1) return pick(free);
+
+  const win = immediateWin("O");
+  if (win >= 0) return win;
+
+  const block = immediateWin("X");
+  if (block >= 0 && Math.random() < 0.85) return block;
+
+  if (!state[4] && Math.random() < 0.8) return 4;
+
+  const corners = free.filter((i) => [0, 2, 6, 8].includes(i));
+  if (corners.length && Math.random() < 0.7) return pick(corners);
+
+  return pick(free);
+}
 
   // hard mode
   if (free.length === 9) return pick([0, 2, 4, 6, 8]);
@@ -361,11 +369,66 @@ function finish() {
   tiles.forEach((t) => (t.disabled = true));
 }
 
+let ac;
+let soundOn = true;
+
+function audio() {
+  if (!ac) {
+    try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch {}
+  }
+  if (ac && ac.state === "suspended") ac.resume();
+  return ac;
+}
+
+function tone(freq, start, dur, vol) {
+  const a = audio();
+  if (!a || !soundOn) return;
+  const o = a.createOscillator();
+  const g = a.createGain();
+  const t = a.currentTime + start;
+  o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g);
+  g.connect(a.destination);
+  o.start(t);
+  o.stop(t + dur + 0.05);
+}
+
+function resultSound(who) {
+  if (who === "D") {
+    tone(440, 0.1, 0.5, 0.12);
+    tone(392, 0.25, 0.7, 0.12);
+    return;
+  }
+  const d = Math.max(0, (ms(380) + ms(1000)) / 1000 - 0.08);
+  if (currentMode === "cpu" && who === "O") {
+    tone(330, d, 0.6, 0.15);
+    tone(247, d + 0.15, 0.9, 0.15);
+  } else {
+    tone(659, d, 0.9, 0.18);
+    tone(880, d + 0.1, 1.1, 0.16);
+    tone(1318, d + 0.22, 1.2, 0.08);
+  }
+}
+
+const soundBtn = $("#sound");
+
+soundBtn.addEventListener("click", () => {
+  soundOn = !soundOn;
+  soundBtn.setAttribute("aria-pressed", soundOn);
+  soundBtn.setAttribute("aria-label", soundOn ? "Mute sound" : "Unmute sound");
+  if (soundOn) tone(560, 0, 0.1, 0.12); // confirmation blip when turning on
+});
+
 function place(i) {
   state[i] = turn;
   tiles[i].innerHTML = MARKS[turn];
   tiles[i].disabled = true;
   labelTile(i);
+
+  tone(turn === "X" ? 560 : 420, 0, 0.1, 0.12); // move sound
 
   const combo = winningLine(state);
   if (combo) {
@@ -374,6 +437,7 @@ function place(i) {
     score[key]++;
     setTitle(currentMode === "cpu" ? (turn === "X" ? "You Win" : "Computer Wins") : `${turn} Wins`);
     updateTurn();
+    resultSound(turn); // win sound
 
     const g = gid;
     const lineAt = ms(380);
@@ -389,6 +453,7 @@ function place(i) {
     setTitle("It’s a Draw");
     updateTurn();
     renderScore("d");
+    resultSound("D"); // draw sound
     return;
   }
 
@@ -397,7 +462,6 @@ function place(i) {
   updateTurn();
   computerTurn();
 }
-
 board.addEventListener("click", (e) => {
   const tile = e.target.closest("[data-tile]");
   if (!tile || refreshing || over || busy) return;
