@@ -1,13 +1,13 @@
 # Tic Tac Toe
 
-A basic Tic Tac Toe game but with an Apple inspired UI/UX, two game modes, and three difficulty levels.
+A basic Tic Tac Toe game but with an Apple inspired UI/UX, smooth animations and sound effects. It features two game modes, and three difficulty levels.
 
 ## Features
 
 - **Apple-Inspired UI/UX** 
-- **Smooth Animations** 
 - **Three Difficulty Levels** 
-- **Two Game Modes** 
+- **Two Game Modes**
+- **Sound Effects**
 - **Fully Responsive** 
 - **Lightweight**
 
