@@ -143,7 +143,7 @@ function drawWinLine(combo) {
   y1 -= dy;
   x2 += dx;
   y2 += dy;
-  const L = Math.hypot(x2 - x1, y2 - y1);
+  const L = Math.hypot(x2 - x1, y2 - y1)
 
   winLine.setAttribute("viewBox", `0 0 ${br.width} ${br.height}`);
   winLine.style.opacity = "1";
@@ -164,7 +164,7 @@ function drawWinLine(combo) {
   });
 }
 
-// board refrshh
+// board refrsh
 async function refreshBoard(reset) {
   if (refreshing) {
     pending = reset;
@@ -371,9 +371,9 @@ function place(i) {
   tiles[i].disabled = true;
   labelTile(i);
 
-  const combo = winningLine(state);
+  const combo = winningLine(state)
   if (combo) {
-    finish();
+    finish()
     const key = turn.toLowerCase();
     score[key]++;
     setTitle(currentMode === "cpu" ? (turn === "X" ? "You Win" : "Computer Wins") : `${turn} Wins`);
@@ -382,13 +382,15 @@ function place(i) {
     const g = gid;
     const lineAt = ms(380);
     const doneAt = lineAt + ms(1000) + 120;
-    setTimeout(() => g === gid && drawWinLine(combo), lineAt);
+    setTimeout(() => g === gid && drawWinLine(combo), lineAt)
     setTimeout(() => g === gid && renderScore(key), doneAt);
     return;
   }
 
+
+
   if (state.every(Boolean)) {
-    finish();
+    finish()
     score.d++;
     setTitle("It’s a Draw");
     updateTurn();
@@ -399,7 +401,7 @@ function place(i) {
   turn = turn === "X" ? "O" : "X";
   setTitle(turnTitle());
   updateTurn();
-  computerTurn();
+  computerTurn()
 }
 
 board.addEventListener("click", (e) => {
@@ -409,3 +411,32 @@ board.addEventListener("click", (e) => {
   if (!state[i]) place(i);
 });
 
+newGameBtn.addEventListener("click",() =>refreshBoard(resetGame));
+
+wire(mode,(v) =>{
+    currentMode = v
+    const cpu = v === "cpu";
+    level.toggleAttribute("data-off", !cpu)
+    level.inert =!cpu
+    refreshBoard(newSession)
+})
+
+
+
+wire(level,(v)=>{
+    currentLevel = v
+    refreshBoard(newSession)
+
+})
+
+resetScoreBtn.addEventListener("click", ()=>{
+    Object.assign(score, {x:0, d:0, o:0});
+    renderScore();
+})
+
+const placeThumbs = () => [mode, level].forEach((s) => moveThumb(s, false));
+placeThumbs();
+window.addEventListener("load", placeThumbs);
+window.addEventListener("resize", placeThumbs);
+
+resetGame();
