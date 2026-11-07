@@ -9,7 +9,12 @@ A basic Tic Tac Toe game but with an Apple inspired UI/UX, two game modes, and t
 - **Three Difficulty Levels** 
 - **Two Game Modes** 
 - **Fully Responsive** 
-- **Lightweight** 
+- **Lightweight**
+
+## Screenshots
+<img width="1153" height="864" alt="image" src="https://github.com/user-attachments/assets/419fcb35-d3b5-4459-b616-785d85cfd0fb" />
+<img width="1131" height="858" alt="image" src="https://github.com/user-attachments/assets/e8de16d0-dea2-486c-aa38-3fb2320264d6" />
+<img width="1133" height="885" alt="image" src="https://github.com/user-attachments/assets/8c5799eb-807b-41db-83d8-54eafcc891bf" />
 
 ## Tech Stack
 
