@@ -28,7 +28,7 @@
       <!-- header -->
       <header class="flex h-11 w-full items-center justify-between">
         <div class="text-base font-semibold">Tic Tac Toe</div>
-        <div class="flex gap-1">
+        <div class="flex gap-2">
           <button class="icon-btn" aria-label="Sound" aria-pressed="true">
             <svg
               width="18"
@@ -83,12 +83,12 @@
 
       <!-- main -->
       <main
-        class="flex flex-1 flex-col items-center justify-center gap-10 py-4 lg:py-[min(2rem,3svh)] lg:grid lg:grid-cols-[auto_340px] lg:content-center lg:items-center lg:justify-center lg:gap-24"
-      >
-        <section class="flex flex-col items-center">
+        class="flex flex-1 flex-col items-center justify-center gap-0 py-4 lg:py-[min(2rem,3svh)] lg:grid lg:grid-cols-[auto_340px] lg:content-center lg:items-center lg:justify-center lg:gap-24"
+     >
+        <section class="flex flex-col items-center max-lg:mt-10">
           <h1 id="title" aria-live="polite" class="mb-6 text-center text-[clamp(28px,5svh,40px)] font-bold tracking-tight">Your Turn</h1>
 
-          <!-- tic tac toe grid -->
+          <!-- tic tac toe -->
           <div id="board" class="relative grid w-[min(444px,calc(100vw-2.5rem))] lg:w-[clamp(240px,calc(100svh-17rem),444px)] grid-cols-3 gap-2.5 sm:gap-3">
             <button data-tile class="tile"></button>
             <button data-tile class="tile"></button>
@@ -100,7 +100,7 @@
             <button data-tile class="tile"></button>
             <button data-tile class="tile"></button>
 
-            <!-- win line -->
+            <!--slash -->
             <svg id="slash" class="pointer-events-none absolute inset-0 size-full opacity-0" aria-hidden="true">
               <line class="stroke-canvas" stroke-width="8" stroke-linecap="round" />
               <line class="stroke-ink" stroke-width="4" stroke-linecap="round" />
@@ -108,17 +108,17 @@
           </div>
         </section>
 
-        <!-- info box -->
-        <div class="w-full max-w-111 lg:max-w-85">
+  
+        <div class="w-full max-w-111 lg:max-w-85 max-lg:contents max-lg:*:w-full max-lg:*:max-w-111">
           <!-- mode selector -->
-          <div id="mode" class="seg h-11" role="group" aria-label="Game mode">
+          <div id="mode" class="seg h-11 order-first" role="group" aria-label="Game mode">
             <span class="thumb" aria-hidden="true"></span>
             <button data-v="cpu" aria-pressed="true" class="seg-btn">vs Computer</button>
             <button data-v="pvp" aria-pressed="false" class="seg-btn">Pass &amp; Play</button>
           </div>
 
           <!-- level seltor -->
-          <div id="level" class="seg level" role="group" aria-label="Difficulty">
+          <div id="level" class="seg level order-first" role="group" aria-label="Difficulty">
             <span class="thumb" aria-hidden="true"></span>
             <button data-v="easy" aria-pressed="false" class="seg-btn">Easy</button>
             <button data-v="medium" aria-pressed="true" class="seg-btn">Medium</button>
