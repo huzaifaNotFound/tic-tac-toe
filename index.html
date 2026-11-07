@@ -62,36 +62,51 @@
           </h1>
 
           <!-- tic tac toe grid -->
-          <div id="board" class="grid grid-cols-3 gap-3">
+          <div id="board" class=" relative grid grid-cols-3 gap-3">
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
             <button
-              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
+              data-tile
+              class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-hover-line transition-all duration-110 enabled:hover:bg-hover enabled:hover:border-hover-line disabled:cursor-default"
             ></button>
+            <!-- slash   -->
+            <svg id="slash" class="pointer-events-none absolute inset-0 size-full opacity-0" aria-hidden="true">
+              <line class="stroke-canvas" stroke-width="8" stroke-linecap="round" />
+              <line class="stroke-ink" stroke-width="4" stroke-linecap="round" />
+            </svg>
           </div>
-        </div>
+          </div>
+
 
         <!-- info box  -->
         <div class="w-85 h-75 my-auto">
@@ -147,34 +162,69 @@
             </button>
           </div>
 
-          <!-- score  -->
+          <!-- score -->
           <div class="flex justify-between gap-2 w-full my-8">
             <div
-              class="flex-1 h-23 bg-tile rounded-2xl border border-ink shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center"
+              data-score="x"
+              class="group flex-1 h-23 bg-tile rounded-2xl border border-transparent shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center transition-colors duration-500 data-turn:border-ink data-win:bg-invert"
             >
-              <span class="font-sans text-4xl font-bold text-ink">0</span>
-              <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">You</span>
+              <span
+                data-n
+                class="font-sans text-4xl font-bold text-ink tabular-nums transition-colors duration-500 group-data-win:text-on-invert"
+                >0</span
+              >
+              <span
+                data-l
+                class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5 transition-colors duration-500 group-data-win:text-on-invert/70"
+                >You</span
+              >
             </div>
+
             <div
-              class="flex-1 h-23 bg-tile rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center"
+              data-score="d"
+              class="group flex-1 h-23 bg-tile rounded-2xl border border-transparent shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center transition-colors duration-500 data-turn:border-ink data-win:bg-invert"
             >
-              <span class="font-sans text-4xl font-bold text-ink">0</span>
-              <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">Draws</span>
+              <span
+                data-n
+                class="font-sans text-4xl font-bold text-ink tabular-nums transition-colors duration-500 group-data-win:text-on-invert"
+                >0</span
+              >
+              <span
+                data-l
+                class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5 transition-colors duration-500 group-data-win:text-on-invert/70"
+                >Draws</span
+              >
             </div>
+
             <div
-              class="flex-1 h-23 bg-tile rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center"
+              data-score="o"
+              class="group flex-1 h-23 bg-tile rounded-2xl border border-transparent shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center transition-colors duration-500 data-turn:border-ink data-win:bg-invert"
             >
-              <span class="font-sans text-4xl font-bold text-ink">0</span>
-              <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">Computer</span>
+              <span
+                data-n
+                class="font-sans text-4xl font-bold text-ink tabular-nums transition-colors duration-500 group-data-win:text-on-invert"
+                >0</span
+              >
+              <span
+                data-l
+                class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5 transition-colors duration-500 group-data-win:text-on-invert/70"
+                >Computer</span
+              >
             </div>
           </div>
 
           <!-- control buttons-->
           <div class="w-full flex gap-3">
-            <button class="flex-1 h-11 font-sans text-ink bg-fill font-medium text-[14px] rounded-3xl cursor-pointer">
+            <button
+              id="reset-score"
+              class="flex-1 h-11 font-sans text-ink bg-fill font-medium text-[14px] rounded-3xl cursor-pointer"
+            >
               Reset Score
             </button>
-            <button class="flex-1 h-11 font-sans text-[14px] font-medium rounded-3xl bg-ink text-tile cursor-pointer">
+            <button
+              id="new-game"
+              class="flex-1 h-11 font-sans text-[14px] font-medium rounded-3xl bg-ink text-tile cursor-pointer"
+            >
               New Game
             </button>
           </div>
