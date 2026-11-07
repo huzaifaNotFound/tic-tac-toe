@@ -24,7 +24,7 @@
     />
   </head>
   <body class="min-h-svh bg-canvas font-sans text-ink antialiased">
-    <div class="mx-auto flex min-h-svh w-full max-w-6xl flex-col px-5 pt-6 pb-10 sm:px-12">
+    <div class="mx-auto flex min-h-svh w-full max-w-6xl flex-col px-5 pt-4 pb-5 sm:px-12 lg:pt-6 lg:pb-10">
       <!-- header -->
       <header class="flex h-11 w-full items-center justify-between">
         <div class="text-base font-semibold">Tic Tac Toe</div>
@@ -83,13 +83,13 @@
 
       <!-- main -->
       <main
-        class="flex flex-1 flex-col items-center justify-center gap-0 py-4 lg:py-[min(2rem,3svh)] lg:grid lg:grid-cols-[auto_340px] lg:content-center lg:items-center lg:justify-center lg:gap-24"
+        class="flex flex-1 flex-col items-center justify-center gap-0 py-2 lg:py-[min(2rem,3svh)] lg:grid lg:grid-cols-[auto_340px] lg:content-center lg:items-center lg:justify-center lg:gap-24"
      >
-        <section class="flex flex-col items-center max-lg:mt-10">
-          <h1 id="title" aria-live="polite" class="mb-6 text-center text-[clamp(28px,5svh,40px)] font-bold tracking-tight">Your Turn</h1>
+        <section class="flex flex-col items-center max-lg:mt-4">
+          <h1 id="title" aria-live="polite" class="mb-3 text-center text-[clamp(28px,5svh,40px)] font-bold tracking-tight lg:mb-6">Your Turn</h1>
 
           <!-- tic tac toe -->
-          <div id="board" class="relative grid w-[min(444px,calc(100vw-2.5rem))] lg:w-[clamp(240px,calc(100svh-17rem),444px)] grid-cols-3 gap-2.5 sm:gap-3">
+          <div id="board" class="relative grid w-[clamp(180px,calc(100svh-26rem),min(444px,calc(100vw-2.5rem)))] lg:w-[clamp(240px,calc(100svh-17rem),444px)] grid-cols-3 gap-2.5 sm:gap-3">
             <button data-tile class="tile"></button>
             <button data-tile class="tile"></button>
             <button data-tile class="tile"></button>
@@ -126,7 +126,7 @@
           </div>
 
           <!-- score -->
-          <div class="my-8 flex w-full gap-2">
+          <div class="my-4 flex w-full gap-2 lg:my-8">
             <div data-score="x" class="score-card">
               <span data-n class="score-n">0</span><span data-l class="score-l">You</span>
             </div>
