@@ -409,29 +409,3 @@ board.addEventListener("click", (e) => {
   if (!state[i]) place(i);
 });
 
-newGameBtn.addEventListener("click", () => refreshBoard(resetGame));
-
-wire(mode, (v) => {
-  currentMode = v;
-  const cpu = v === "cpu";
-  level.toggleAttribute("data-off", !cpu);
-  level.inert = !cpu;
-  refreshBoard(newSession);
-});
-
-wire(level, (v) => {
-  currentLevel = v;
-  refreshBoard(newSession);
-});
-
-resetScoreBtn.addEventListener("click", () => {
-  Object.assign(score, { x: 0, d: 0, o: 0 });
-  renderScore();
-});
-
-const placeThumbs = () => [mode, level].forEach((s) => moveThumb(s, false));
-placeThumbs();
-window.addEventListener("load", placeThumbs);
-window.addEventListener("resize", placeThumbs);
-
-resetGame();
