@@ -52,8 +52,8 @@
       </header>
 
       <!--main-->
-      <main class="w-full flex-1 flex items-center justify-center mt-42">
-        <div class="w-160 h-auto flex flex-col items-center justify-center">
+      <main class="w-full grid grid-cols-[640px_340px]  justify-center mt-42 pr-20">
+        <div class="w-160 flex flex-col items-center justify-center">
           <h1 class="font-sans font-bold text-[40px] text-center mb-6 text-ink">Your Turn</h1>
 
           <!-- tic tac toe grid -->
@@ -89,24 +89,43 @@
         </div>
 
         <!-- info box-->
-        <div class="h-75 w-85 bg-amber-50">
-          <div class="w-full rounded-full bg-fill h-11 flex items-center justify-between p-[5px]">
-            <button class="h-full w-41 bg-tile rounded-full text-ink font-sans text-sm font-medium shadow-sm">vs Computer</button>
-            <button class="h-full w-41 rounded-full text-ink-soft  font-sans text-sm font-medium">Pass & Play</button>
+         <!--    mode selector   -->
+        <div class="w-85 h-75 my-auto">
+          <div class="w-full rounded-full bg-fill h-11 flex items-center justify-between p-1.25">
+            <button class="h-full w-41 bg-tile rounded-full text-ink font-sans text-sm font-medium shadow-sm" cursor-pointer>vs Computer</button>
+            <button class="h-full w-41 rounded-full text-ink-soft  font-sans text-sm font-medium cursor-pointer">Pass & Play</button>
           </div>
 
-          <div class="w-full rounded-full bg-fill h-9 flex items-center justify-between p-[5px] mt-3">
-            <button class="h-full w-27 rounded-full text-ink-soft font-sans text-sm font-medium">Easy</button>
-            <button class="h-full w-27 bg-tile rounded-full text-ink font-sans text-sm font-medium shadow-sm">Medium</button>
-            <button class="h-full w-27 rounded-full text-ink-soft font-sans text-sm font-medium">Hard</button>
+         <!--    level selector   -->
+          <div class="w-full rounded-full bg-fill h-9 flex items-center justify-between p-1.25 mt-3">
+            <button class="h-full w-27 rounded-full text-ink-soft font-sans text-sm font-medium cursor-pointer">Easy</button>
+            <button class="h-full w-27 bg-tile rounded-full text-ink font-sans text-sm font-medium shadow-sm cursor-pointer">Medium</button>
+            <button class="h-full w-27 rounded-full text-ink-soft font-sans text-sm font-medium cursor-pointer">Hard</button>
           </div>
+
+          <!-- score  -->
+          <div class="flex justify-between gap-1 w-full my-8">
+            <div class="w-26 h-23 bg-tile rounded-2xl border border-ink shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center">
+              <span class="font-sans text-4xl font-bold text-ink">0</span>
+              <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">You</span>
+            </div>
+            <div class="w-26 h-23 bg-tile rounded-2xl  shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center">
+              <span class="font-sans text-4xl font-bold text-ink">0</span>
+              <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">Draws</span>
+            </div>
+            <div class="w-26 h-23 bg-tile rounded-2xl  shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center">
+              <span class="font-sans text-4xl font-bold text-ink">0</span>
+              <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">Computer</span>
+            </div>
+          </div>
+
+          <!-- control buttons-->
           <div>
-            <div><span>0</span><span>You</span></div>
-            <div><span>0</span><span>Draws</span></div>
-            <div><span>0</span> <span>Computer</span></div>
+            <button class="w-41 h-11 font-sans text-ink bg-fill font-medium text-[14px] rounded-3xl">Reset Score</button>
+            <button class="w-41 h-11 font-sans text-[14px] font-medium rounded-3xl bg-ink text-tile">New Game</button>
           </div>
-          <div><button>Reset Score</button> <button>New Game</button></div>
         </div>
+
       </main>
     </div>
     <script type="module" src="/src/main.js"></script>
