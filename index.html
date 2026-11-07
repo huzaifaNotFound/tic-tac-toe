@@ -51,13 +51,18 @@
         </div>
       </header>
 
-      <!--main-->
-      <main class="w-full grid grid-cols-[640px_340px]  justify-center mt-42 pr-20">
+      <!--main  -->
+      <main class="w-full grid grid-cols-[640px_340px] justify-center mt-42 pr-20">
         <div class="w-160 flex flex-col items-center justify-center">
-          <h1 class="font-sans font-bold text-[40px] text-center mb-6 text-ink">Your Turn</h1>
+          <h1
+            id="title"
+            class="font-sans font-bold text-[40px] text-center mb-6 text-ink tracking-tight motion-reduce:animate-none"
+          >
+            Your Turn
+          </h1>
 
           <!-- tic tac toe grid -->
-          <div class="grid grid-cols-3 gap-3">
+          <div id="board" class="grid grid-cols-3 gap-3">
             <button
               class="h-35 w-35 bg-tile rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] border border-line cursor-pointer hover:bg-hover hover:border-2 transition-all duration-110"
             ></button>
@@ -88,44 +93,92 @@
           </div>
         </div>
 
-        <!-- info box-->
-         <!--    mode selector   -->
+        <!-- info box  -->
         <div class="w-85 h-75 my-auto">
-          <div class="w-full rounded-full bg-fill h-11 flex items-center justify-between p-1.25">
-            <button class="h-full w-41 bg-tile rounded-full text-ink font-sans text-sm font-medium shadow-sm" cursor-pointer>vs Computer</button>
-            <button class="h-full w-41 rounded-full text-ink-soft  font-sans text-sm font-medium cursor-pointer">Pass & Play</button>
+          <!-- mode selector -->
+          <div id="mode" class="relative flex h-11 w-full items-center rounded-full bg-fill p-1">
+            <span
+              class="thumb pointer-events-none absolute top-1 bottom-1 left-0 w-0 rounded-full bg-raised shadow-sm transition-[transform,width] duration-500 ease-pill data-instant:transition-none"
+            ></span>
+            <button
+              data-v="cpu"
+              aria-pressed="true"
+              class="relative z-10 h-full flex-1 cursor-pointer rounded-full text-sm font-medium text-ink-soft transition-colors duration-300 aria-pressed:text-ink"
+            >
+              vs Computer
+            </button>
+            <button
+              data-v="pvp"
+              aria-pressed="false"
+              class="relative z-10 h-full flex-1 cursor-pointer rounded-full text-sm font-medium text-ink-soft transition-colors duration-300 aria-pressed:text-ink"
+            >
+              Pass &amp; Play
+            </button>
           </div>
 
-         <!--    level selector   -->
-          <div class="w-full rounded-full bg-fill h-9 flex items-center justify-between p-1.25 mt-3">
-            <button class="h-full w-27 rounded-full text-ink-soft font-sans text-sm font-medium cursor-pointer">Easy</button>
-            <button class="h-full w-27 bg-tile rounded-full text-ink font-sans text-sm font-medium shadow-sm cursor-pointer">Medium</button>
-            <button class="h-full w-27 rounded-full text-ink-soft font-sans text-sm font-medium cursor-pointer">Hard</button>
+          <!-- level selector -->
+          <div
+            id="level"
+            class="relative mt-3 flex h-9 w-full items-center overflow-hidden rounded-full bg-fill p-1 transition-all duration-500 ease-expo data-off:mt-0 data-off:h-0 data-off:-translate-y-2 data-off:py-0 data-off:opacity-0"
+          >
+            <span
+              class="thumb pointer-events-none absolute top-1 bottom-1 left-0 w-0 rounded-full bg-raised shadow-sm transition-[transform,width] duration-500 ease-pill data-instant:transition-none motion-reduce:transition-none"
+            ></span>
+            <button
+              data-v="easy"
+              aria-pressed="false"
+              class="relative z-10 h-full flex-1 cursor-pointer rounded-full text-sm font-medium text-ink-soft transition-colors duration-300 aria-pressed:text-ink"
+            >
+              Easy
+            </button>
+            <button
+              data-v="medium"
+              aria-pressed="true"
+              class="relative z-10 h-full flex-1 cursor-pointer rounded-full text-sm font-medium text-ink-soft transition-colors duration-300 aria-pressed:text-ink"
+            >
+              Medium
+            </button>
+            <button
+              data-v="hard"
+              aria-pressed="false"
+              class="relative z-10 h-full flex-1 cursor-pointer rounded-full text-sm font-medium text-ink-soft transition-colors duration-300 aria-pressed:text-ink"
+            >
+              Hard
+            </button>
           </div>
 
           <!-- score  -->
-          <div class="flex justify-between gap-1 w-full my-8">
-            <div class="w-26 h-23 bg-tile rounded-2xl border border-ink shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center">
+          <div class="flex justify-between gap-2 w-full my-8">
+            <div
+              class="flex-1 h-23 bg-tile rounded-2xl border border-ink shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center"
+            >
               <span class="font-sans text-4xl font-bold text-ink">0</span>
               <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">You</span>
             </div>
-            <div class="w-26 h-23 bg-tile rounded-2xl  shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center">
+            <div
+              class="flex-1 h-23 bg-tile rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center"
+            >
               <span class="font-sans text-4xl font-bold text-ink">0</span>
               <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">Draws</span>
             </div>
-            <div class="w-26 h-23 bg-tile rounded-2xl  shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center">
+            <div
+              class="flex-1 h-23 bg-tile rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] flex flex-col items-center justify-center"
+            >
               <span class="font-sans text-4xl font-bold text-ink">0</span>
               <span class="font-medium font-sans text-ink-soft/90 text-sm mt-1.5">Computer</span>
             </div>
           </div>
 
           <!-- control buttons-->
-          <div>
-            <button class="w-41 h-11 font-sans text-ink bg-fill font-medium text-[14px] rounded-3xl">Reset Score</button>
-            <button class="w-41 h-11 font-sans text-[14px] font-medium rounded-3xl bg-ink text-tile">New Game</button>
+          <div class="w-full flex gap-3">
+            <button class="flex-1 h-11 font-sans text-ink bg-fill font-medium text-[14px] rounded-3xl cursor-pointer">
+              Reset Score
+            </button>
+            <button class="flex-1 h-11 font-sans text-[14px] font-medium rounded-3xl bg-ink text-tile cursor-pointer">
+              New Game
+            </button>
           </div>
         </div>
-
       </main>
     </div>
     <script type="module" src="/src/main.js"></script>
