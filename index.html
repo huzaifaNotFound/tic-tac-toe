@@ -83,13 +83,13 @@
 
       <!-- main -->
       <main
-        class="flex flex-1 flex-col items-center justify-center gap-10 py-8 lg:grid lg:grid-cols-[auto_340px] lg:content-center lg:items-center lg:justify-center lg:gap-24"
+        class="flex flex-1 flex-col items-center justify-center gap-10 py-4 lg:py-[min(2rem,3svh)] lg:grid lg:grid-cols-[auto_340px] lg:content-center lg:items-center lg:justify-center lg:gap-24"
       >
         <section class="flex flex-col items-center">
-          <h1 id="title" aria-live="polite" class="mb-6 text-center text-[40px] font-bold tracking-tight">Your Turn</h1>
+          <h1 id="title" aria-live="polite" class="mb-6 text-center text-[clamp(28px,5svh,40px)] font-bold tracking-tight">Your Turn</h1>
 
           <!-- tic tac toe grid -->
-          <div id="board" class="relative grid w-[min(444px,calc(100vw-2.5rem))] grid-cols-3 gap-2.5 sm:gap-3">
+          <div id="board" class="relative grid w-[min(444px,calc(100vw-2.5rem))] lg:w-[clamp(240px,calc(100svh-17rem),444px)] grid-cols-3 gap-2.5 sm:gap-3">
             <button data-tile class="tile"></button>
             <button data-tile class="tile"></button>
             <button data-tile class="tile"></button>
