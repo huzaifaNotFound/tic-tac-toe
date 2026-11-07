@@ -1,28 +1,27 @@
 import "./style.css";
 
-const mode = document.querySelector("#mode");
-const level = document.querySelector("#level");
-const title = document.querySelector("#title");
-const board = document.querySelector("#board");
-const newGameBtn = document.querySelector("#new-game");
-const resetScoreBtn = document.querySelector("#reset-score");
-const winLine = document.querySelector("#slash");
+const $ = (sel, scope = document) => scope.querySelector(sel);
+
+const root = document.documentElement;
+const mode = $("#mode");
+const level = $("#level");
+const title = $("#title");
+const board = $("#board");
+const winLine = $("#slash");
+const newGameBtn = $("#new-game");
+const resetScoreBtn = $("#reset-score");
+const themeBtn = $("#theme");
+const themeColor = $('meta[name="theme-color"]');
 const tiles = [...board.querySelectorAll("[data-tile]")];
-const lines = [...winLine.querySelectorAll("line")];
-const scoreEls = {
-  x: document.querySelector('[data-score="x"]'),
-  d: document.querySelector('[data-score="d"]'),
-  o: document.querySelector('[data-score="o"]'),
-};
+const slashLines = [...winLine.querySelectorAll("line")];
+const cards = Object.fromEntries(
+  ["x", "d", "o"].map((k) => {
+    const el = $(`[data-score="${k}"]`);
+    return [k, { el, n: $("[data-n]", el), l: $("[data-l]", el) }];
+  }),
+);
 
-const XS = `<svg class="mark block size-14 text-ink pointer-events-none" viewBox="0 0 56 56"
-  fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
-  <path pathLength="1" d="M10 10L46 46"/><path pathLength="1" d="M46 10L10 46"/></svg>`;
-
-const OS = `<svg class="mark block size-14 text-mark-o pointer-events-none" viewBox="0 0 56 56"
-  fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
-  <circle pathLength="1" cx="28" cy="28" r="18" transform="rotate(-90 28 28)"/></svg>`;
-
+//wins
 const LINES = [
   [0, 1, 2],
   [3, 4, 5],
@@ -34,27 +33,45 @@ const LINES = [
   [2, 4, 6],
 ];
 
+const mark = (color, body, extra = "") =>
+  `<svg class="mark ${color}" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="3" ${extra} aria-hidden="true">${body}</svg>`;
 
+const MARKS = {
+  X: mark("text-ink", '<path pathLength="1" d="M10 10L46 46"/><path pathLength="1" d="M46 10L10 46"/>', 'stroke-linecap="round"'),
+  O: mark("text-mark-o", '<circle pathLength="1" cx="28" cy="28" r="18" transform="rotate(-90 28 28)"/>'),
+};
+
+const NAMES = {
+  cpu: { x: "You", d: "Draws", o: "Computer" },
+  pvp: { x: "Player X", d: "Draws", o: "Player O" },
+};
+
+const ANIMS = ["animate-rise", "animate-pop"];
+
+/* ---------- State ---------- */
 let state = Array(9).fill(null);
 let turn = "X";
+let starter = "X"; 
 let over = false;
-let currentMode = "cpu";
-const score = { x: 0, d: 0, o: 0 };
-let gid = 0; 
+let busy = false; 
 let refreshing = false;
-let pending = null;
+let pending = null; 
+let gid = 0; 
+let currentMode = "cpu";
+let currentLevel = "medium";
+const score = { x: 0, d: 0, o: 0 };
 
 const reduceMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
-
+const ms = (n) => (reduceMotion() ? 0 : n);
 
 function replay(el, cls) {
-  el.classList.remove(cls);
-  void el.offsetWidth;
+  el.classList.remove(...ANIMS);
+  void el.offsetWidth; 
   el.classList.add(cls);
 }
 
 function setTitle(text) {
-  if (title.textContent === text) return;
+  if (title.textContent.trim() === text) return;
   title.textContent = text;
   replay(title, "animate-rise");
 }
@@ -62,19 +79,34 @@ function setTitle(text) {
 const turnTitle = () =>
   currentMode === "cpu" ? (turn === "X" ? "Your Turn" : "Thinking…") : `${turn}’s Turn`;
 
-const labels = () =>
-  currentMode === "cpu"
-    ? { x: "You", d: "Draws", o: "Computer" }
-    : { x: "Player X", d: "Draws", o: "Player O" };
+const syncLock = () => board.toggleAttribute("data-locked", over || busy || refreshing);
 
+const labelTile = (i) =>
+  tiles[i].setAttribute("aria-label", `Row ${Math.floor(i / 3) + 1}, column ${(i % 3) + 1}, ${state[i] ?? "empty"}`);
+
+//theme
+function applyTheme(t) {
+  root.dataset.theme = t;
+  themeBtn.setAttribute("aria-label", t === "dark" ? "Switch to light mode" : "Switch to dark mode");
+  themeColor?.setAttribute("content", t === "dark" ? "#000000" : "#f5f5f7");
+}
+
+themeBtn.addEventListener("click", () => {
+  const next = root.dataset.theme === "dark" ? "light" : "dark";
+  try {
+    localStorage.setItem("theme", next); 
+  } catch {}
+  const swap = () => applyTheme(next);
+  if (document.startViewTransition && !reduceMotion()) document.startViewTransition(swap);
+  else swap();
+});
+
+applyTheme(root.dataset.theme === "dark" ? "dark" : "light");
 
 function renderScore(winKey) {
-  const names = labels();
+  const names = NAMES[currentMode];
   for (const k of ["x", "d", "o"]) {
-    const el = scoreEls[k];
-    const n = el.querySelector("[data-n]");
-    const l = el.querySelector("[data-l]");
-
+    const { el, n, l } = cards[k];
     if (l.textContent !== names[k]) {
       l.textContent = names[k];
       replay(l, "animate-rise");
@@ -88,62 +120,59 @@ function renderScore(winKey) {
   }
 }
 
-
 function updateTurn() {
-  scoreEls.x.toggleAttribute("data-turn", !over && turn === "X");
-  scoreEls.o.toggleAttribute("data-turn", !over && turn === "O");
+  cards.x.el.toggleAttribute("data-turn", !over && turn === "X");
+  cards.o.el.toggleAttribute("data-turn", !over && turn === "O");
+  syncLock();
 }
 
-
+//slashh
 function drawWinLine(combo) {
   const br = board.getBoundingClientRect();
-  const a = tiles[combo[0]].getBoundingClientRect();
-  const c = tiles[combo[2]].getBoundingClientRect();
+  const first = tiles[combo[0]].getBoundingClientRect();
+  const last = tiles[combo[2]].getBoundingClientRect();
+  const center = (r) => [r.left + r.width / 2 - br.left, r.top + r.height / 2 - br.top];
 
-  let x1 = a.left + a.width / 2 - br.left,
-    y1 = a.top + a.height / 2 - br.top;
-  let x2 = c.left + c.width / 2 - br.left,
-    y2 = c.top + c.height / 2 - br.top;
-
-   const len = Math.hypot(x2 - x1, y2 - y1);
-  const ux = (x2 - x1) / len,
-    uy = (y2 - y1) / len,
-    ext = a.width * 0.28;
-  x1 -= ux * ext;
-  y1 -= uy * ext;
-  x2 += ux * ext;
-  y2 += uy * ext;
+  let [x1, y1] = center(first);
+  let [x2, y2] = center(last);
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  const ext = first.width * 0.28; 
+  const dx = ((x2 - x1) / len) * ext;
+  const dy = ((y2 - y1) / len) * ext;
+  x1 -= dx;
+  y1 -= dy;
+  x2 += dx;
+  y2 += dy;
   const L = Math.hypot(x2 - x1, y2 - y1);
 
   winLine.setAttribute("viewBox", `0 0 ${br.width} ${br.height}`);
   winLine.style.opacity = "1";
 
-  lines.forEach((line) => {
-    line.setAttribute("x1", x1);
-    line.setAttribute("y1", y1);
-    line.setAttribute("x2", x2);
-    line.setAttribute("y2", y2);
+  slashLines.forEach((line) => {
+    Object.entries({ x1, y1, x2, y2 }).forEach(([k, v]) => line.setAttribute(k, v));
     line.style.strokeDasharray = L;
     line.animate([{ strokeDashoffset: L }, { strokeDashoffset: 0 }], {
-      duration: 1000,
+      duration: ms(1000),
       easing: "cubic-bezier(0.4, 0, 0.1, 1)",
       fill: "both",
     });
   });
 
- 
+  
   tiles.forEach((t, i) => {
     t.style.opacity = combo.includes(i) ? "" : "0.35";
   });
 }
 
-
+// board refrshh
 async function refreshBoard(reset) {
   if (refreshing) {
     pending = reset;
     return;
   }
   refreshing = true;
+  gid++; 
+  syncLock();
 
   try {
     if (reduceMotion()) {
@@ -153,42 +182,46 @@ async function refreshBoard(reset) {
 
     
     const out = { duration: 220, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" };
-    const leaving = [];
-    tiles.forEach((t) => {
-      const mark = t.querySelector("svg");
-      if (mark)
-        leaving.push(
-          mark.animate(
-            [
-              { opacity: 1, transform: "scale(1)" },
-              { opacity: 0, transform: "scale(0.8)" },
-            ],
-            out,
-          ),
-        );
-    });
-    if (winLine) leaving.push(winLine.animate([{ opacity: 1 }, { opacity: 0 }], out));
+    const leaving = tiles
+      .map((t) => t.querySelector("svg"))
+      .filter(Boolean)
+      .map((m) =>
+        m.animate(
+          [
+            { opacity: 1, transform: "scale(1)" },
+            { opacity: 0, transform: "scale(0.8)" },
+          ],
+          out,
+        ),
+      );
+    if (parseFloat(getComputedStyle(winLine).opacity) > 0) {
+      leaving.push(winLine.animate([{ opacity: 1 }, { opacity: 0 }], out));
+    }
     await Promise.all(leaving.map((a) => a.finished));
 
     
     reset();
     leaving.forEach((a) => a.cancel());
 
-    
-    const entering = tiles.map((t, i) => {
-      const row = Math.floor(i / 3),
-        col = i % 3;
-      return t.animate(
+    //tiles effect
+    const entering = tiles.map((t, i) =>
+      t.animate(
         [
           { opacity: 0.4, transform: "translateY(6px) scale(0.94)" },
           { opacity: 1, transform: "translateY(0) scale(1)" },
         ],
-        { duration: 650, delay: (row + col) * 55, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "backwards" },
-      );
-    });
+        {
+          duration: 650,
+          delay: (Math.floor(i / 3) + (i % 3)) * 55,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+          fill: "backwards",
+        },
+      ),
+    );
     await Promise.all(entering.map((a) => a.finished));
   } finally {
     refreshing = false;
+    syncLock();
     if (pending) {
       const next = pending;
       pending = null;
@@ -197,10 +230,10 @@ async function refreshBoard(reset) {
   }
 }
 
-
+// seg controls
 function moveThumb(seg, animate = true) {
-  const thumb = seg.querySelector(".thumb");
-  const active = seg.querySelector('[aria-pressed="true"]');
+  const thumb = $(".thumb", seg);
+  const active = $('[aria-pressed="true"]', seg);
   if (!thumb || !active) return;
   thumb.toggleAttribute("data-instant", !animate);
   thumb.style.width = active.offsetWidth + "px";
@@ -210,60 +243,152 @@ function moveThumb(seg, animate = true) {
 function wire(seg, onChange) {
   seg.addEventListener("click", (e) => {
     const btn = e.target.closest("button");
-    if (!btn) return;
-    if (btn.getAttribute("aria-pressed") === "true") return;
+    if (!btn || btn.getAttribute("aria-pressed") === "true") return;
     seg.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", b === btn));
     moveThumb(seg);
-    onChange?.(btn.dataset.v);
+    onChange(btn.dataset.v);
   });
+}
+
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+const winningLine = (s) => LINES.find(([a, b, c]) => s[a] && s[a] === s[b] && s[a] === s[c]) ?? null;
+
+const winnerOf = (s) => {
+  const l = winningLine(s);
+  return l && s[l[0]];
+};
+
+
+function immediateWin(player) {
+  for (let i = 0; i < 9; i++) {
+    if (state[i]) continue;
+    state[i] = player;
+    const w = winnerOf(state);
+    state[i] = null;
+    if (w) return i;
+  }
+  return -1;
+}
+
+function minimax(s, player, depth) {
+  const w = winnerOf(s);
+  if (w) return w === "O" ? 10 - depth : depth - 10;
+  if (s.every(Boolean)) return 0;
+  let best = player === "O" ? -Infinity : Infinity;
+  for (let i = 0; i < 9; i++) {
+    if (s[i]) continue;
+    s[i] = player;
+    const v = minimax(s, player === "O" ? "X" : "O", depth + 1);
+    s[i] = null;
+    best = player === "O" ? Math.max(best, v) : Math.min(best, v);
+  }
+  return best;
+}
+
+function pickMove() {
+  const free = state.flatMap((v, i) => (v ? [] : [i]));
+
+  if (currentLevel === "easy") return pick(free);
+
+  if (currentLevel === "medium") {
+    if (Math.random() < 0.15) return pick(free); 
+    const win = immediateWin("O");
+    if (win >= 0) return win;
+    const block = immediateWin("X");
+    if (block >= 0) return block;
+    return pick(free);
+  }
+
+  // hard mode
+  if (free.length === 9) return pick([0, 2, 4, 6, 8]); 
+  let bestScore = -Infinity;
+  let bestMoves = [];
+  for (const i of free) {
+    state[i] = "O";
+    const v = minimax(state, "X", 1);
+    state[i] = null;
+    if (v > bestScore) {
+      bestScore = v;
+      bestMoves = [i];
+    } else if (v === bestScore) bestMoves.push(i);
+  }
+  return pick(bestMoves);
+}
+
+function computerTurn(delay = 550) {
+  if (currentMode !== "cpu" || turn !== "O" || over) return;
+  busy = true;
+  syncLock();
+  const g = gid;
+  const go = () => {
+    if (g !== gid) return; 
+    if (refreshing) return setTimeout(go, 100); 
+    busy = false;
+    place(pickMove());
+  };
+  setTimeout(go, delay);
 }
 
 
 function resetGame() {
   gid++;
+  busy = false;
   state = Array(9).fill(null);
-  turn = "X";
+  turn = starter;
   over = false;
-  tiles.forEach((t) => {
+  tiles.forEach((t, i) => {
     t.innerHTML = "";
     t.disabled = false;
     t.style.opacity = "";
+    labelTile(i);
   });
-  lines.forEach((l) => l.getAnimations().forEach((a) => a.cancel()));
+  slashLines.forEach((l) => l.getAnimations().forEach((a) => a.cancel()));
   winLine.style.opacity = "0";
+  setTitle(turnTitle());
   renderScore();
   updateTurn();
+  computerTurn(1000); 
 }
 
-function findWinner() {
-  return LINES.find(([a, b, c]) => state[a] && state[a] === state[b] && state[a] === state[c]) ?? null;
+
+function newSession() {
+  Object.assign(score, { x: 0, d: 0, o: 0 });
+  starter = "X";
+  resetGame();
+}
+
+
+function finish() {
+  over = true;
+  starter = starter === "X" ? "O" : "X";
+  tiles.forEach((t) => (t.disabled = true));
 }
 
 function place(i) {
   state[i] = turn;
-  tiles[i].innerHTML = turn === "X" ? XS : OS;
+  tiles[i].innerHTML = MARKS[turn];
   tiles[i].disabled = true;
+  labelTile(i);
 
-  const combo = findWinner();
+  const combo = winningLine(state);
   if (combo) {
-    over = true;
+    finish();
     const key = turn.toLowerCase();
     score[key]++;
     setTitle(currentMode === "cpu" ? (turn === "X" ? "You Win" : "Computer Wins") : `${turn} Wins`);
     updateTurn();
 
     const g = gid;
-    setTimeout(() => {
-      if (g === gid) drawWinLine(combo);
-    }, 380); 
-    setTimeout(() => {
-      if (g === gid) renderScore(key);
-    }, 1500); 
+    const lineAt = ms(380);
+    const doneAt = lineAt + ms(1000) + 120;
+    setTimeout(() => g === gid && drawWinLine(combo), lineAt);
+    setTimeout(() => g === gid && renderScore(key), doneAt);
     return;
   }
 
   if (state.every(Boolean)) {
-    over = true;
+    finish();
     score.d++;
     setTitle("It’s a Draw");
     updateTurn();
@@ -274,14 +399,14 @@ function place(i) {
   turn = turn === "X" ? "O" : "X";
   setTitle(turnTitle());
   updateTurn();
+  computerTurn();
 }
 
 board.addEventListener("click", (e) => {
   const tile = e.target.closest("[data-tile]");
-  if (!tile || refreshing || over) return;
+  if (!tile || refreshing || over || busy) return;
   const i = tiles.indexOf(tile);
-  if (state[i]) return;
-  place(i);
+  if (!state[i]) place(i);
 });
 
 newGameBtn.addEventListener("click", () => refreshBoard(resetGame));
@@ -291,20 +416,13 @@ wire(mode, (v) => {
   const cpu = v === "cpu";
   level.toggleAttribute("data-off", !cpu);
   level.inert = !cpu;
-  refreshBoard(() => {
-    Object.assign(score, { x: 0, d: 0, o: 0 });
-    resetGame();
-    setTitle(cpu ? "Your Turn" : "X’s Turn");
-  });
+  refreshBoard(newSession);
 });
 
-wire(level, () =>
-  refreshBoard(() => {
-    Object.assign(score, { x: 0, d: 0, o: 0 });
-    resetGame();
-    setTitle("Your Turn");
-  }),
-);
+wire(level, (v) => {
+  currentLevel = v;
+  refreshBoard(newSession);
+});
 
 resetScoreBtn.addEventListener("click", () => {
   Object.assign(score, { x: 0, d: 0, o: 0 });
@@ -316,5 +434,4 @@ placeThumbs();
 window.addEventListener("load", placeThumbs);
 window.addEventListener("resize", placeThumbs);
 
-renderScore();
-updateTurn();
+resetGame();

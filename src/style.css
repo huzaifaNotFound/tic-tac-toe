@@ -1,55 +1,54 @@
 @import "tailwindcss";
 
-/* dark: variant follows the toggle, not the OS */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
-
 :root {
-  --canvas: #f5f5f7; /* page background */
-  --tile: #ffffff; /* tiles */
-  --fill: #e8e8ed; /* segmented controls, secondary buttons */
-  --cell: #ffffff;
-  --raised: #ffffff; /* selected segment */
-  --line: #e5e5ea; /* hairline borders */
+  color-scheme: light;
+  --canvas: #f5f5f7;
+  --tile: #ffffff;
+  --fill: #e8e8ed;
+  --fill-hover: #dedee3;
+  --fill-pressed: #d1d1d6;
+  --raised: #ffffff;
+  --line: #e5e5ea;
   --hover: #fafafa;
   --hover-line: #d1d1d6;
-  --ink: #1d1d1f; /* main text, X mark, win line */
-  --ink-soft: #636366; /* secondary text */
-  --mark-o: #8e8e93; /* O mark */
-  --invert: #1d1d1f; /* primary button, winner tile */
+  --pressed: #f0f0f3;
+  --ink: #1d1d1f;
+  --ink-soft: #636366;
+  --mark-o: #8e8e93;
+  --invert: #1d1d1f;
   --on-invert: #ffffff;
-  --glow: rgba(0, 0, 0, 0.14);
-  --sheen: rgba(255, 255, 255, 0.9);
-  --ambient: rgba(255, 255, 255, 0.8);
 }
 
 [data-theme="dark"] {
+  color-scheme: dark;
   --canvas: #000000;
-  --cell: #0f0f10;
   --tile: #1c1c1e;
   --fill: #1c1c1e;
+  --fill-hover: #2c2c2e;
+  --fill-pressed: #3a3a3c;
   --raised: #2c2c2e;
   --line: #1f1f22;
-  --hover: #161618;
-  --hover-line: #2c2c2e;
+  --hover: #262628;
+  --hover-line: #3a3a3c;
+  --pressed: #2c2c2e;
   --ink: #f5f5f7;
   --ink-soft: #8e8e93;
   --mark-o: #8e8e93;
   --invert: #f5f5f7;
   --on-invert: #000000;
-  --glow: rgba(255, 255, 255, 0.14);
-  --sheen: rgba(255, 255, 255, 0.06);
-  --ambient: rgba(255, 255, 255, 0.07);
 }
 
 @theme inline {
   --color-canvas: var(--canvas);
-  --color-cell: var(--cell);
   --color-tile: var(--tile);
   --color-fill: var(--fill);
+  --color-fill-hover: var(--fill-hover);
+  --color-fill-pressed: var(--fill-pressed);
   --color-raised: var(--raised);
   --color-line: var(--line);
   --color-hover: var(--hover);
   --color-hover-line: var(--hover-line);
+  --color-pressed: var(--pressed);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-mark-o: var(--mark-o);
@@ -60,46 +59,104 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
   --ease-pill: cubic-bezier(0.34, 1.2, 0.64, 1);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px rgb(0 0 0 / 0.05);
 }
 
 @theme {
   --animate-rise: rise 1s cubic-bezier(0.19, 1, 0.22, 1);
   @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
   }
   --animate-pop: pop 0.5s cubic-bezier(0.34, 1.3, 0.64, 1);
   @keyframes pop {
-    from {
-      transform: scale(0.7);
-    }
-    to {
-      transform: scale(1);
-    }
+    from { transform: scale(0.7); }
+    to   { transform: scale(1); }
   }
 }
 
-[data-tile] {
-  display: grid;
-  place-items: center;
+@layer base {
+  html { -webkit-tap-highlight-color: transparent; }
+  button {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+  button:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--ink) 40%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Board tile */
+  .tile {
+    @apply relative aspect-square w-full cursor-pointer rounded-xl border border-line bg-tile shadow-card
+           transition-[transform,background-color,border-color,opacity] duration-300 ease-spring
+           enabled:hover:border-hover-line enabled:hover:bg-hover
+           enabled:active:scale-95 enabled:active:bg-pressed enabled:active:duration-100 enabled:active:ease-out
+           disabled:cursor-default;
+  }
+  #board[data-locked] .tile { @apply pointer-events-none; }
+
+  /* Header buttons (sound, theme) */
+  .icon-btn {
+    @apply grid cursor-pointer place-items-center rounded-full bg-fill p-2 text-ink
+           transition-[transform,background-color] duration-300 ease-spring
+           hover:bg-fill-hover
+           active:scale-90 active:bg-fill-pressed active:duration-100 active:ease-out;
+  }
+
+  .btn {
+    @apply h-11 flex-1 cursor-pointer rounded-3xl text-[14px] font-medium
+           transition-[transform,background-color] duration-300 ease-spring
+           active:scale-[0.97] active:duration-100 active:ease-out;
+  }
+  .btn-secondary { @apply bg-fill text-ink hover:bg-fill-hover active:bg-fill-pressed; }
+  .btn-primary   { @apply bg-invert text-on-invert hover:bg-invert/85 active:bg-invert/70; }
+
+  /* Segmented controls */
+  .seg { @apply relative flex w-full items-center rounded-full bg-fill p-1; }
+  .seg-btn {
+    @apply relative z-10 h-full flex-1 cursor-pointer rounded-full text-sm font-medium text-ink-soft
+           transition-[color,opacity] duration-300
+           hover:text-ink aria-pressed:text-ink
+           active:opacity-60 active:duration-100;
+  }
+  .thumb {
+    @apply pointer-events-none absolute inset-y-1 left-0 w-0 rounded-full bg-raised shadow-sm
+           transition-[transform,width] duration-500 ease-pill;
+  }
+  .thumb[data-instant] { @apply transition-none; }
+
+  .level { @apply mt-3 h-9 overflow-hidden transition-all duration-500 ease-expo; }
+  .level[data-off] { @apply mt-0 h-0 -translate-y-2 py-0 opacity-0; }
+
+  .score-card {
+    @apply flex h-23 flex-1 flex-col items-center justify-center rounded-2xl border border-transparent bg-tile shadow-card
+           transition-colors duration-500;
+  }
+  .score-card[data-turn] { @apply border-ink; }
+  .score-card[data-win]  { @apply bg-invert; }
+  .score-n { @apply text-4xl font-bold tabular-nums text-ink transition-colors duration-500; }
+  .score-l { @apply mt-1.5 text-sm font-medium text-ink-soft transition-colors duration-500; }
+  .score-card[data-win] .score-n { @apply text-on-invert; }
+  .score-card[data-win] .score-l { @apply text-on-invert/70; }
 }
 
 .mark {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 40%;
+  height: 40%;
+  pointer-events: none;
   animation: mark-pop 0.5s cubic-bezier(0.34, 1.3, 0.64, 1);
 }
 @keyframes mark-pop {
-  from {
-    transform: scale(0.75);
-  }
-  to {
-    transform: scale(1);
-  }
+  from { transform: scale(0.75); }
+  to   { transform: scale(1); }
 }
 
 .mark path,
@@ -109,6 +166,7 @@
   opacity: 0;
   animation: draw 0.35s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
+.mark path:nth-child(2) { animation-delay: 0.12s; }
 
 @keyframes draw {
   0%   { stroke-dashoffset: 1.05; opacity: 0; }
@@ -116,11 +174,20 @@
   100% { stroke-dashoffset: 0; opacity: 1; }
 }
 
+.icon-stack > svg {
+  grid-area: 1 / 1;
+  transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 300ms ease;
+}
+.icon-stack .moon { opacity: 1; }
+.icon-stack .sun  { opacity: 0; transform: rotate(90deg) scale(0.5); }
+[data-theme="dark"] .icon-stack .moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+[data-theme="dark"] .icon-stack .sun  { opacity: 1; transform: none; }
+
+
 @media (prefers-reduced-motion: reduce) {
-  .mark,
-  .mark path,
-  .mark circle {
-    animation-duration: 0.01ms;
-    animation-delay: 0s;
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
   }
 }
