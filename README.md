@@ -1,22 +1,21 @@
 # Tic Tac Toe
 
-A modern, responsive Tic Tac Toe game featuring an Apple-inspired user interface, smooth animations, and intuitive interactions. Built with HTML, Tailwind CSS, and Vanilla JavaScript.
+A basic Tic Tac Toe game but with an Apple inspired UI/UX, two game modes, and three difficulty levels.
 
 ## Features
 
-- **Apple-Inspired UI/UX:** Minimal interface, clean typography, rounded elements, subtle shadows, and polished visual details.
-- **Smooth Animations:** Fluid transitions and interactive animations for a more engaging experience.
-- **Three Difficulty Levels:** Three levels of difficulty to provide different gameplay challenges.
-- **Two Game Modes:** Two different ways to play.
-- **Fully Responsive:** Optimized layouts for desktop, tablet, and mobile devices.
-- **Interactive Gameplay:** Responsive controls, real-time game updates, and clear visual feedback.
-- **Lightweight:** Built using Vanilla JavaScript without additional frontend frameworks.
+- **Apple-Inspired UI/UX:** 
+- **Smooth Animations:** 
+- **Three Difficulty Levels:** 
+- **Two Game Modes:** 
+- **Fully Responsive:** 
+- **Lightweight:** 
 
 ## Tech Stack
 
-- **HTML5** – Application structure.
-- **Tailwind CSS** – Styling, layouts, and responsive design.
-- **Vanilla JavaScript** – Game logic, interactions, and animations.
+- **HTML5** – 
+- **Tailwind CSS** 
+- **Vanilla JavaScript** 
 
 ## Demo URL
 
