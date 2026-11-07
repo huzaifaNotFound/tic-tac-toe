@@ -4,16 +4,16 @@ A basic Tic Tac Toe game but with an Apple inspired UI/UX, two game modes, and t
 
 ## Features
 
-- **Apple-Inspired UI/UX:** 
-- **Smooth Animations:** 
-- **Three Difficulty Levels:** 
-- **Two Game Modes:** 
-- **Fully Responsive:** 
-- **Lightweight:** 
+- **Apple-Inspired UI/UX** 
+- **Smooth Animations** 
+- **Three Difficulty Levels** 
+- **Two Game Modes** 
+- **Fully Responsive** 
+- **Lightweight** 
 
 ## Tech Stack
 
-- **HTML5** – 
+- **HTML5** 
 - **Tailwind CSS** 
 - **Vanilla JavaScript** 
 
