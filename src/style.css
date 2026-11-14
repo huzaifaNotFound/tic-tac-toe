@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant short (@media (min-width: 640px) and (max-width: 1023.98px) and (max-height: 660px));
+
 :root {
   color-scheme: light;
   --canvas: #f5f5f7;
