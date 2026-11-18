@@ -30,6 +30,3 @@ https://tic-tac-toe-two-opal-12.vercel.app/
 
 Claude sonnet 5.5 was used for sketching out the animations, generating the sound effects and for debugging.
 
-## License
-
-This project is open-source and available under the MIT License.
